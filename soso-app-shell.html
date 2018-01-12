@@ -1,0 +1,107 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="soso-app-shell">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      #navPanel {
+        position: fixed;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+      }
+
+      .fillContainer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      #glass {
+        background: var(--soso-glass-color, rgba(0, 0, 0, 0.3));
+        transition: opacity 0.3s ease;
+        opacity: 0;
+      }
+
+      #navBar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 256px;
+        background: var(--soso-nav-bg-color, white);
+        box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.8);
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        transform: translate3d(-300px, 0, 0);
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #navBar.showing {
+        transform: translate3d(0, 0, 0);
+      }
+    </style>
+    <div id="appMain">
+      <slot name="main"></slot>
+    </div>
+    <div id="navPanel" style="display: none;">
+      <div id="glass" class="fillContainer" on-click="hideMenu"></div>
+      <div id="navBar">
+        <slot name="nav"></slot>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class SosoAppShell extends Polymer.Element {
+      static get is() { return 'soso-app-shell'; }
+
+      constructor() {
+        super();
+        this._menuShowing = false;
+      }
+
+      get menuShowing() {
+        return this._menuShowing;
+      }
+
+      showMenu() {
+        if (!this._menuShowing) {
+          this._menuShowing = true;
+          this.$.navPanel.style.display = "";
+          document.documentElement.style.overflow = "hidden";
+          setTimeout(() => {
+            if (this._menuShowing) {
+              this.$.glass.style.opacity = 1;
+              this.$.navBar.classList.add("showing");
+            }
+          });
+        }
+      }
+
+      hideMenu() {
+        if (this.menuShowing) {
+          this._menuShowing = false;
+          this.$.glass.style.opacity = 0;
+          document.documentElement.style.overflow = "";
+          this.$.navBar.classList.remove("showing");
+          setTimeout(() => {
+            if (!this._menuShowing) {
+              this.$.navPanel.style.display = "none";
+            }
+          }, 300);
+        }
+      }
+    }
+
+    window.customElements.define(SosoAppShell.is, SosoAppShell);
+  </script>
+</dom-module>

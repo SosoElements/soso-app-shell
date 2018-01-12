@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>soso-app-shell demo</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../soso-app-shell.html">
+
+  <custom-style>
+    <style is="custom-style">
+    </style>
+  </custom-style>
+</head>
+
+<body>
+  <soso-app-shell id="shell">
+    <div slot="main">
+      <div style="text-align: center; padding: 20px;">
+        <button onclick="showMenu()">MENU</button>
+      </div>
+    </div>
+    <div slot="nav">
+      <h3>Nav Menu</h3>
+    </div>
+  </soso-app-shell>
+  <script>
+    function showMenu() {
+      let shell = document.getElementById("shell");
+      shell.showMenu();
+    }
+  </script>
+</body>
+
+</html>
